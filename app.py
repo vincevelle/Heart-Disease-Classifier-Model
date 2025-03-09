@@ -29,7 +29,7 @@ input_fields = ['Age', 'RestingBP', 'Cholesterol', 'FastingBS', 'MaxHR', 'Oldpea
 @app.route('/')
 def home():
     return render_template('home.html', fields=['Age', 'Sex (M/F)', 'RestingBP', 'Cholesterol', 
-                                                 'FastingBS (0/1)', 'MaxHR', 'Oldpeak', 
+                                                 'FastingBS', 'MaxHR', 'Oldpeak', 
                                                  'ChestPainType (ATA/NAP/TA)', 
                                                  'RestingECG (Normal/ST)', 'ExerciseAngina (0/1)',
                                                  'ST_Slope (Flat/Up)'])
@@ -47,17 +47,17 @@ def preprocess_input(form_data):
     input_dict['ExerciseAngina_Y'] = 1 if form_data['ExerciseAngina (0/1)'] == '1' else 0
 
     # One-hot encode ChestPainType
-    input_dict['ChestPainType_ATA'] = 1 if form_data['ChestPainType (ATA/NAP/TA)'].upper() == 'ATA' else 0
-    input_dict['ChestPainType_NAP'] = 1 if form_data['ChestPainType (ATA/NAP/TA)'].upper() == 'NAP' else 0
-    input_dict['ChestPainType_TA'] = 1 if form_data['ChestPainType (ATA/NAP/TA)'].upper() == 'TA' else 0
+    input_dict['ChestPainType_ATA'] = 1 if form_data['ChestPainType'].upper() == 'ATA' else 0
+    input_dict['ChestPainType_NAP'] = 1 if form_data['ChestPainType'].upper() == 'NAP' else 0
+    input_dict['ChestPainType_TA'] = 1 if form_data['ChestPainType'].upper() == 'TA' else 0
 
     # One-hot encode RestingECG
-    input_dict['RestingECG_Normal'] = 1 if form_data['RestingECG (Normal/ST)'].upper() == 'NORMAL' else 0
-    input_dict['RestingECG_ST'] = 1 if form_data['RestingECG (Normal/ST)'].upper() == 'ST' else 0
+    input_dict['RestingECG_Normal'] = 1 if form_data['RestingECG'].upper() == 'NORMAL' else 0
+    input_dict['RestingECG_ST'] = 1 if form_data['RestingECG'].upper() == 'ST' else 0
 
     # One-hot encode ST_Slope
-    input_dict['ST_Slope_Flat'] = 1 if form_data['ST_Slope (Flat/Up)'].upper() == 'FLAT' else 0
-    input_dict['ST_Slope_Up'] = 1 if form_data['ST_Slope (Flat/Up)'].upper() == 'UP' else 0
+    input_dict['ST_Slope_Flat'] = 1 if form_data['ST_Slope'].upper() == 'FLAT' else 0
+    input_dict['ST_Slope_Up'] = 1 if form_data['ST_Slope'].upper() == 'UP' else 0
 
     # Interaction Terms
     input_dict['Oldpeak_x_ExerciseAngina'] = input_dict['Oldpeak'] * input_dict['ExerciseAngina_Y']
@@ -74,6 +74,13 @@ def preprocess_input(form_data):
 
 @app.route('/predict', methods=['POST'])
 def predict():
+
+    print("Received Form Data:", request.form)  # Debugging
+    try:
+        input_df = preprocess_input(request.form)
+    except KeyError as e:
+        return f"Missing field: {e}. Please check your form input names."
+
     try:
         input_df = preprocess_input(request.form)
     except ValueError:
