@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Heart Disease Classifier</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="container py-4">
+  <main class="mx-auto" style="max-width: 650px">
+    <h1>Heart Disease Classifier</h1>
+    <p class="text-muted">Educational demonstration only. Not medical advice or a validated clinical diagnostic tool.</p>
+    {% if error %}<div class="alert alert-danger" role="alert">{{ error }}</div>{% endif %}
+    <form action="/predict" method="post" class="border rounded p-4 bg-light">
+      <div class="mb-3"><label for="Age" class="form-label">Age (years)</label><input class="form-control" id="Age" name="Age" type="number" min="1" max="120" required></div>
+      <div class="mb-3"><label for="Sex" class="form-label">Sex (dataset category)</label><select class="form-select" id="Sex" name="Sex" required><option value="M">Male</option><option value="F">Female</option></select></div>
+      <div class="mb-3"><label for="ChestPainType" class="form-label">Chest pain type</label><select class="form-select" id="ChestPainType" name="ChestPainType" required><option value="ASY">Asymptomatic (ASY)</option><option value="ATA">Atypical angina (ATA)</option><option value="NAP">Non-anginal pain (NAP)</option><option value="TA">Typical angina (TA)</option></select></div>
+      <div class="mb-3"><label for="RestingBP" class="form-label">Resting blood pressure (mm Hg)</label><input class="form-control" id="RestingBP" name="RestingBP" type="number" min="0" max="300" step="any" required></div>
+      <div class="mb-3"><label for="Cholesterol" class="form-label">Cholesterol (mg/dL)</label><input class="form-control" id="Cholesterol" name="Cholesterol" type="number" min="0" max="1000" step="any" required></div>
+      <div class="mb-3"><label for="FastingBS" class="form-label">Fasting blood sugar greater than 120 mg/dL</label><select class="form-select" id="FastingBS" name="FastingBS"><option value="0">No (0)</option><option value="1">Yes (1)</option></select></div>
+      <div class="mb-3"><label for="RestingECG" class="form-label">Resting ECG</label><select class="form-select" id="RestingECG" name="RestingECG"><option value="Normal">Normal</option><option value="ST">ST-T abnormality (ST)</option><option value="LVH">Left ventricular hypertrophy (LVH)</option></select></div>
+      <div class="mb-3"><label for="MaxHR" class="form-label">Maximum heart rate (bpm)</label><input class="form-control" id="MaxHR" name="MaxHR" type="number" min="0" max="250" required></div>
+      <div class="mb-3"><label for="ExerciseAngina" class="form-label">Exercise-induced angina</label><select class="form-select" id="ExerciseAngina" name="ExerciseAngina"><option value="N">No</option><option value="Y">Yes</option></select></div>
+      <div class="mb-3"><label for="Oldpeak" class="form-label">Oldpeak (ST depression)</label><input class="form-control" id="Oldpeak" name="Oldpeak" type="number" min="-10" max="20" step="0.1" required></div>
+      <div class="mb-3"><label for="ST_Slope" class="form-label">ST slope</label><select class="form-select" id="ST_Slope" name="ST_Slope"><option value="Flat">Flat</option><option value="Up">Up</option><option value="Down">Down</option></select></div>
+      <div class="mb-3"><label for="model" class="form-label">Model</label><select class="form-select" id="model" name="model"><option value="advanced">Neural network</option><option value="baseline">Logistic regression</option></select></div>
+      <button type="submit" class="btn btn-primary w-100">Predict</button>
+    </form>
+  </main>
+</body>
+</html>
